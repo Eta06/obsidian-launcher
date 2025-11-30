@@ -5,7 +5,9 @@
 
   ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge&color=4f46e5)
   ![License](https://img.shields.io/badge/license-GPLv3-green.svg?style=for-the-badge&color=ec4899)
-  ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg?style=for-the-badge&color=1a1a1a)
+  ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+  ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
+  ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
   ![Status](https://img.shields.io/badge/status-Stable-success.svg?style=for-the-badge&color=10b981)
 
   <br>
