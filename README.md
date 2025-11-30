@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# 💎 Obsidian Launcher
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)
+![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-Stable-success.svg?style=for-the-badge)
 
-Currently, two official plugins are available:
+> **A premium, high-performance Minecraft launcher built for the elite.**  
+> Experience the game with a launcher that matches your ambition. Sleek, powerful, and precise.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🚀 **High-Performance Core**
+Built on **Electron** and **React**, Obsidian Launcher delivers a seamless, lag-free experience. Optimized for speed and reliability.
 
-## Expanding the ESLint configuration
+### 🎨 **Elite UI Design**
+Forget clunky, outdated interfaces.
+- **Glassmorphism Effects**: Modern, translucent visuals.
+- **Deep Dark Theme**: Easy on the eyes, perfect for late-night gaming.
+- **Smooth Animations**: Powered by `framer-motion` for fluid interactions.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### ⚙️ **Precision Control**
+- **Advanced RAM Allocation**:
+  - Automatic system memory detection.
+  - **Visual Gradient Zones** (Green/Orange/Red) to guide safe allocation.
+  - Dynamic status indicators (Optimal, High Performance, Unstable).
+- **Dynamic Version Selection**: Automatically fetches and selects the latest Minecraft releases.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🔐 **Secure Authentication**
+- **Microsoft Login**: Fully integrated, secure OAuth2 login via `msmc`.
+- **Offline Mode**: Support for offline play with custom usernames.
+- **Token Caching**: Stays logged in without re-authenticating every time.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🌍 **Global Ready**
+- **Multi-Language Support**: 🇹🇷 Turkish, 🇺🇸 English, 🇩🇪 German, 🇫🇷 French.
+- **Instant Switching**: Change languages on the fly without restarting.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+*   **Core**: [Electron](https://www.electronjs.org/)
+*   **Frontend**: [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
+*   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+*   **Build Tool**: [Vite](https://vitejs.dev/)
+*   **Launcher Core**: [Minecraft Launcher Core](https://github.com/MSFTserver/minecraft-launcher-core)
+*   **Auth**: [MSMC](https://github.com/Hanro50/msmc)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 📥 Installation
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/Eta06/obsidian-launcher.git
+    cd obsidian-launcher
+    ```
+
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the application**
+    ```bash
+    npm run start
+    ```
+
+---
+
+## 📸 Screenshots
+
+*(Add screenshots of the launcher here)*
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1.  Fork the project
+2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by Eta06</sub>
+</div>
