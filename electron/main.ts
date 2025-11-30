@@ -13,8 +13,10 @@ let cachedMsToken: any = null; // Token'ı burada saklayacağız
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 650,
+    width: 1100,
+    height: 700,
+    minWidth: 1100,
+    minHeight: 700,
     frame: false,
     webPreferences: {
       nodeIntegration: true,

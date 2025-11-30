@@ -1,7 +1,7 @@
 # 💎 Obsidian Launcher
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)
+![License](https://img.shields.io/badge/license-GPLv3-green.svg?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg?style=for-the-badge)
 ![Status](https://img.shields.io/badge/status-Stable-success.svg?style=for-the-badge)
 
@@ -67,12 +67,6 @@ Forget clunky, outdated interfaces.
     ```bash
     npm run start
     ```
-
----
-
-## 📸 Screenshots
-
-*(Add screenshots of the launcher here)*
 
 ---
 

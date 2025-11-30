@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 interface Version {
     id: string;
@@ -13,9 +14,19 @@ interface Version {
 interface VersionSelectorProps {
     selectedVersion: string;
     onSelect: (version: string) => void;
+    showSnapshots: boolean;
+    showOldBeta: boolean;
+    showOldAlpha: boolean;
 }
 
-const VersionSelector: React.FC<VersionSelectorProps> = ({ selectedVersion, onSelect }) => {
+const VersionSelector: React.FC<VersionSelectorProps> = ({
+    selectedVersion,
+    onSelect,
+    showSnapshots,
+    showOldBeta,
+    showOldAlpha
+}) => {
+    const { t } = useTranslation();
     const [versions, setVersions] = useState<Version[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -25,24 +36,29 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({ selectedVersion, onSe
             try {
                 const response = await fetch('https://launchermeta.mojang.com/mc/game/version_manifest.json');
                 const data = await response.json();
-                // Sadece release sürümlerini al ve ilk 50 tanesini göster
-                const releases = data.versions.filter((v: Version) => v.type === 'release').slice(0, 50);
-                setVersions(releases);
+                const filteredVersions = data.versions.filter((v: Version) => {
+                    if (v.type === 'release') return true;
+                    if (v.type === 'snapshot' && showSnapshots) return true;
+                    if (v.type === 'old_beta' && showOldBeta) return true;
+                    if (v.type === 'old_alpha' && showOldAlpha) return true;
+                    return false;
+                });
+                setVersions(filteredVersions);
 
-                // Eğer seçili versiyon yoksa veya boşsa en son sürümü seç
-                if (releases.length > 0 && (!selectedVersion || selectedVersion === '')) {
-                    onSelect(releases[0].id);
+                if (filteredVersions.length > 0 && (!selectedVersion || selectedVersion === '')) {
+                    onSelect(filteredVersions[0].id);
                 }
 
                 setLoading(false);
             } catch (error) {
-                console.error("Versiyonlar çekilemedi:", error);
+                console.error(t('version.fetchError'), error);
                 setLoading(false);
             }
         };
 
         fetchVersions();
-    }, []); // Bağımlılık dizisi boş kalmalı, sadece mount anında çalışsın
+        fetchVersions();
+    }, [showSnapshots, showOldBeta, showOldAlpha]);
 
     return (
         <div className="relative w-full z-50">
@@ -51,7 +67,7 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({ selectedVersion, onSe
                 className="w-full bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center justify-between text-white hover:bg-white/10 transition-all"
             >
                 <span className="font-medium">
-                    {loading ? "Yükleniyor..." : `Sürüm: ${selectedVersion || 'Seçiniz'}`}
+                    {loading ? t('version.loading') : (selectedVersion ? `${selectedVersion} - ${versions.find(v => v.id === selectedVersion)?.type.toUpperCase() || 'RELEASE'}` : t('version.select'))}
                 </span>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -77,11 +93,11 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({ selectedVersion, onSe
                                     setIsOpen(false);
                                 }}
                                 className={`w-full text-left p-3 transition-colors ${selectedVersion === version.id
-                                        ? 'bg-blue-600 text-white font-bold'
-                                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                                    ? 'bg-blue-600 text-white font-bold'
+                                    : 'text-gray-300 hover:bg-white/10 hover:text-white'
                                     }`}
                             >
-                                {version.id}
+                                {version.id} - {version.type.toUpperCase()}
                             </button>
                         ))}
                     </motion.div>

@@ -1,0 +1,49 @@
+{
+    "app": {
+        "title": "OBSIDIAN",
+        "ready": "Hazır",
+        "downloading": "İndiriliyor: %{{percent}} - {{type}}",
+        "gameLaunched": "Oyun Başarıyla Başlatıldı!",
+        "downloadingFiles": "Dosyalar İndiriliyor...",
+        "running": "ÇALIŞIYOR",
+        "play": "OYNA"
+    },
+    "auth": {
+        "offline": "Korsan (Offline)",
+        "microsoft": "Microsoft",
+        "connectingMicrosoft": "Microsoft sunucularına bağlanılıyor...",
+        "welcome": "Hoşgeldin, {{name}}",
+        "loginFailed": "Giriş başarısız oldu.",
+        "loginCancelled": "Giriş İptal Edildi",
+        "pleaseEnterUsername": "Lütfen kullanıcı adı girin!",
+        "pleaseMicrosoftLogin": "Lütfen önce Microsoft ile giriş yapın!"
+    },
+    "version": {
+        "label": "Oyun Sürümü",
+        "loading": "Yükleniyor...",
+        "select": "Seçiniz",
+        "versionLabel": "Sürüm: {{version}}",
+        "fetchError": "Versiyonlar çekilemedi:"
+    },
+    "user": {
+        "username": "Kullanıcı Adı",
+        "microsoftAccount": "Microsoft Hesabı",
+        "enterName": "İsmini Yaz...",
+        "login": "Giriş Yap",
+        "player": "Oyuncu"
+    },
+    "settings": {
+        "title": "System Configuration",
+        "memoryAllocation": "Memory Allocation",
+        "interfaceLanguage": "Interface Language",
+        "systemTotal": "System Total",
+        "safeLimit": "Safe Limit",
+        "cancel": "Cancel",
+        "applyChanges": "Apply Changes",
+        "status": {
+            "standard": "STANDARD",
+            "optimal": "OPTIMAL",
+            "unstable": "UNSTABLE"
+        }
+    }
+}

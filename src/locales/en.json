@@ -1,0 +1,49 @@
+{
+    "app": {
+        "title": "OBSIDIAN",
+        "ready": "Ready",
+        "downloading": "Downloading: %{{percent}} - {{type}}",
+        "gameLaunched": "Game Launched Successfully!",
+        "downloadingFiles": "Downloading Files...",
+        "running": "RUNNING",
+        "play": "PLAY"
+    },
+    "auth": {
+        "offline": "Pirate (Offline)",
+        "microsoft": "Microsoft",
+        "connectingMicrosoft": "Connecting to Microsoft servers...",
+        "welcome": "Welcome, {{name}}",
+        "loginFailed": "Login failed.",
+        "loginCancelled": "Login Cancelled",
+        "pleaseEnterUsername": "Please enter a username!",
+        "pleaseMicrosoftLogin": "Please login with Microsoft first!"
+    },
+    "version": {
+        "label": "Game Version",
+        "loading": "Loading...",
+        "select": "Select",
+        "versionLabel": "Version: {{version}}",
+        "fetchError": "Failed to fetch versions:"
+    },
+    "user": {
+        "username": "Username",
+        "microsoftAccount": "Microsoft Account",
+        "enterName": "Enter your name...",
+        "login": "Login",
+        "player": "Player"
+    },
+    "settings": {
+        "title": "System Configuration",
+        "memoryAllocation": "Memory Allocation",
+        "interfaceLanguage": "Interface Language",
+        "systemTotal": "System Total",
+        "safeLimit": "Safe Limit",
+        "cancel": "Cancel",
+        "applyChanges": "Apply Changes",
+        "status": {
+            "standard": "STANDARD",
+            "optimal": "OPTIMAL",
+            "unstable": "UNSTABLE"
+        }
+    }
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlay, FaMicrosoft, FaUserSecret, FaCog, FaDiscord, FaUser } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 import VersionSelector from './components/VersionSelector';
 import SettingsModal from './components/SettingsModal';
@@ -10,27 +11,45 @@ const electron = (window as any).require ? (window as any).require('electron') :
 const ipcRenderer = electron ? electron.ipcRenderer : null;
 
 function App() {
+  const { t, i18n } = useTranslation();
+
   // State Tanımları
   const [username, setUsername] = useState(''); // Cracked için isim
   const [authType, setAuthType] = useState<'offline' | 'microsoft'>('offline');
   const [msProfile, setMsProfile] = useState<any>(null); // Microsoft profil verisi
   const [status, setStatus] = useState<'idle' | 'downloading' | 'playing'>('idle');
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState('Hazır');
+  const [statusText, setStatusText] = useState(t('app.ready'));
   const [selectedVersion, setSelectedVersion] = useState(''); // Varsayılan versiyon (Otomatik seçilecek)
 
   // Ayarlar State'i
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [ram, setRam] = useState(4);
-  const [language, setLanguage] = useState('tr');
+  const [language, setLanguage] = useState(i18n.language || 'tr');
   const [systemTotalRam, setSystemTotalRam] = useState(8 * 1024 * 1024 * 1024); // Varsayılan 8GB (Byte cinsinden)
+
+  // Version Filters
+  const [showSnapshots, setShowSnapshots] = useState(false);
+  const [showOldBeta, setShowOldBeta] = useState(false);
+  const [showOldAlpha, setShowOldAlpha] = useState(false);
 
   // Başlangıçta ayarları ve sistem bilgisini yükle
   useEffect(() => {
     const savedRam = localStorage.getItem('obsidian_ram');
     const savedLang = localStorage.getItem('obsidian_language');
     if (savedRam) setRam(parseInt(savedRam));
-    if (savedLang) setLanguage(savedLang);
+    if (savedLang) {
+      setLanguage(savedLang);
+      i18n.changeLanguage(savedLang);
+    }
+
+    const savedSnapshots = localStorage.getItem('obsidian_showSnapshots');
+    const savedOldBeta = localStorage.getItem('obsidian_showOldBeta');
+    const savedOldAlpha = localStorage.getItem('obsidian_showOldAlpha');
+
+    if (savedSnapshots) setShowSnapshots(savedSnapshots === 'true');
+    if (savedOldBeta) setShowOldBeta(savedOldBeta === 'true');
+    if (savedOldAlpha) setShowOldAlpha(savedOldAlpha === 'true');
 
     // Sistem RAM bilgisini çek
     if (ipcRenderer) {
@@ -50,19 +69,19 @@ function App() {
       setStatus('downloading');
       const percent = Math.round((data.task / data.total) * 100);
       setProgress(percent);
-      setStatusText(`İndiriliyor: %${percent} - ${data.type}`);
+      setStatusText(t('app.downloading', { percent, type: data.type }));
     });
 
     // Oyun Açıldı Dinleyici
     ipcRenderer.on('game-launched', () => {
       setStatus('playing');
-      setStatusText('Oyun Başarıyla Başlatıldı!');
+      setStatusText(t('app.gameLaunched'));
 
       // 3 saniye sonra arayüzü resetle (isteğe bağlı)
       setTimeout(() => {
         setStatus('idle');
         setProgress(0);
-        setStatusText('Hazır');
+        setStatusText(t('app.ready'));
       }, 5000);
     });
 
@@ -76,7 +95,7 @@ function App() {
   // Microsoft Login İşlemi
   const handleMicrosoftLogin = async () => {
     if (!ipcRenderer) return;
-    setStatusText("Microsoft sunucularına bağlanılıyor...");
+    setStatusText(t('auth.connectingMicrosoft'));
 
     // Backend'e sor
     const result = await ipcRenderer.invoke('login-microsoft');
@@ -87,14 +106,14 @@ function App() {
       setAuthType('microsoft');
 
       // Güvenli erişim (JSON yapısına göre: result.profile -> profile -> name)
-      const name = result.profile?.profile?.name || result.profile?.name || "Oyuncu";
-      setStatusText(`Hoşgeldin, ${name}`);
+      const name = result.profile?.profile?.name || result.profile?.name || t('user.player');
+      setStatusText(t('auth.welcome', { name }));
 
       // 2 saniye sonra hazır mesajına dön
-      setTimeout(() => setStatusText('Hazır'), 2000);
+      setTimeout(() => setStatusText(t('app.ready')), 2000);
     } else {
-      alert("Giriş başarısız oldu.");
-      setStatusText("Giriş İptal Edildi");
+      alert(t('auth.loginFailed'));
+      setStatusText(t('auth.loginCancelled'));
     }
   };
 
@@ -104,18 +123,18 @@ function App() {
 
     // Offline modda isim kontrolü
     if (authType === 'offline' && !username) {
-      alert("Lütfen kullanıcı adı girin!");
+      alert(t('auth.pleaseEnterUsername'));
       return;
     }
 
     // Microsoft modunda giriş kontrolü
     if (authType === 'microsoft' && !msProfile) {
-      alert("Lütfen önce Microsoft ile giriş yapın!");
+      alert(t('auth.pleaseMicrosoftLogin'));
       return;
     }
 
     setStatus('downloading');
-    setStatusText('Dosyalar İndiriliyor...');
+    setStatusText(t('app.downloadingFiles'));
     setProgress(0);
 
     ipcRenderer.send('launch-game', {
@@ -134,11 +153,19 @@ function App() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+
+        systemTotalRam={systemTotalRam}
+        showSnapshots={showSnapshots}
+        showOldBeta={showOldBeta}
+        showOldAlpha={showOldAlpha}
         onSave={(settings) => {
           setRam(settings.ram);
           setLanguage(settings.language);
+          i18n.changeLanguage(settings.language);
+          setShowSnapshots(settings.showSnapshots);
+          setShowOldBeta(settings.showOldBeta);
+          setShowOldAlpha(settings.showOldAlpha);
         }}
-        systemTotalRam={systemTotalRam}
       />
 
       {/* SOL SIDEBAR */}
@@ -183,7 +210,7 @@ function App() {
             className="mb-8"
           >
             <h1 className="text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 mb-2">
-              OBSIDIAN
+              {t('app.title')}
             </h1>
             <div className="flex items-center gap-4">
               <span className="px-3 py-1 bg-white/10 rounded text-xs font-bold tracking-widest text-obsidian-500 border border-obsidian-500/30">
@@ -198,13 +225,13 @@ function App() {
               onClick={() => setAuthType('offline')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all border ${authType === 'offline' ? 'bg-white/10 text-white border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
             >
-              <FaUserSecret /> Korsan (Offline)
+              <FaUserSecret /> {t('auth.offline')}
             </button>
             <button
               onClick={() => setAuthType('microsoft')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all border ${authType === 'microsoft' ? 'bg-blue-600/20 text-blue-400 border-blue-500/50 shadow-[0_0_10px_rgba(59,130,246,0.3)]' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
             >
-              <FaMicrosoft /> Microsoft
+              <FaMicrosoft /> {t('auth.microsoft')}
             </button>
           </div>
 
@@ -217,18 +244,21 @@ function App() {
               {/* Versiyon Seçici */}
               <div className="w-full">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 mb-1 block">
-                  Oyun Sürümü
+                  {t('version.label')}
                 </label>
                 <VersionSelector
                   selectedVersion={selectedVersion}
                   onSelect={setSelectedVersion}
+                  showSnapshots={showSnapshots}
+                  showOldBeta={showOldBeta}
+                  showOldAlpha={showOldAlpha}
                 />
               </div>
 
               {/* Kullanıcı Girişi */}
               <div className="w-full">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 mb-1 block">
-                  {authType === 'offline' ? 'Kullanıcı Adı' : 'Microsoft Hesabı'}
+                  {authType === 'offline' ? t('user.username') : t('user.microsoftAccount')}
                 </label>
 
                 {authType === 'offline' ? (
@@ -238,7 +268,7 @@ function App() {
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="İsmini Yaz..."
+                      placeholder={t('user.enterName')}
                       className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all backdrop-blur-sm"
                     />
                   </div>
@@ -252,7 +282,7 @@ function App() {
                           alt="skin"
                         />
                         <span className="font-bold text-blue-400">
-                          {msProfile?.profile?.name || msProfile?.name || "Oyuncu"}
+                          {msProfile?.profile?.name || msProfile?.name || t('user.player')}
                         </span>
                       </div>
                     ) : (
@@ -261,7 +291,7 @@ function App() {
                         className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors w-full h-full"
                       >
                         <FaMicrosoft />
-                        <span>Giriş Yap</span>
+                        <span>{t('user.login')}</span>
                       </button>
                     )}
                   </div>
@@ -284,7 +314,7 @@ function App() {
                         ? 'bg-gray-800 text-gray-500 cursor-not-allowed shadow-none'
                         : 'bg-obsidian-500 hover:bg-obsidian-400 text-obsidian-900'}`}
                   >
-                    <FaPlay size={18} /> {status === 'playing' ? 'ÇALIŞIYOR' : 'OYNA'}
+                    <FaPlay size={18} /> {status === 'playing' ? t('app.running') : t('app.play')}
                   </motion.button>
                 ) : (
                   <motion.div
