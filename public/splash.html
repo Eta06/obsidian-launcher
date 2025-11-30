@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidian Launcher</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background matching the app */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: sans-serif;
+            overflow: hidden;
+            -webkit-app-region: drag; /* Allow dragging the splash screen */
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+        }
+
+        .loader-container {
+            width: 200px;
+            height: 6px;
+            background-color: #333;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #ec4899); /* Indigo to Pink gradient */
+            position: absolute;
+            left: -100%;
+            animation: loading 2s infinite ease-in-out;
+            border-radius: 3px;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -100%;
+            }
+            50% {
+                left: 0%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.jpeg" alt="Obsidian Launcher" class="logo">
+    </div>
+    <div class="loader-container">
+        <div class="loader-bar"></div>
+    </div>
+</body>
+</html>

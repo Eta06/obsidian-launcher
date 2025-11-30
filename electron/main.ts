@@ -4,12 +4,44 @@ import os from 'os';
 import { createRequire } from 'module';
 import { Auth } from 'msmc';
 
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const legacyRequire = createRequire(import.meta.url);
 const { Client, Authenticator } = legacyRequire('minecraft-launcher-core');
 
 const launcher = new Client();
 let mainWindow: BrowserWindow | null = null;
 let cachedMsToken: any = null; // Token'ı burada saklayacağız
+let splashWindow: BrowserWindow | null = null;
+
+function createSplashWindow() {
+  splashWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    frame: false,
+    alwaysOnTop: true,
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+    resizable: false,
+    center: true
+  });
+
+  const splashPath = process.env.ELECTRON_START_URL
+    ? path.join(__dirname, '../public/splash.html')
+    : path.join(__dirname, '../dist/splash.html');
+
+  splashWindow.loadURL(`file://${splashPath}`);
+
+  splashWindow.on('closed', () => {
+    splashWindow = null;
+  });
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -18,6 +50,7 @@ function createWindow() {
     minWidth: 1100,
     minHeight: 700,
     frame: false,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -27,9 +60,23 @@ function createWindow() {
 
   const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../dist/index.html')}`;
   mainWindow.loadURL(startUrl);
+
+  mainWindow.once('ready-to-show', () => {
+    setTimeout(() => {
+      if (splashWindow) {
+        splashWindow.close();
+      }
+      if (mainWindow) {
+        mainWindow.show();
+      }
+    }, 2000);
+  });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createSplashWindow();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
