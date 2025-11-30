@@ -70,12 +70,6 @@ Forget clunky, outdated interfaces.
 
 ---
 
-## 📸 Screenshots
-
-*(Add screenshots of the launcher here)*
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
